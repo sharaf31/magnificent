@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationController {
 
 
-    private Logger log= LoggerFactory.getLogger(OfferController.class);
+    private Logger log= LoggerFactory.getLogger(ApplicationController.class);
 
     @Autowired
     private ApplicationService applicantService;
