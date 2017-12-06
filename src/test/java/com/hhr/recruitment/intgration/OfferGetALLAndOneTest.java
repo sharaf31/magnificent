@@ -39,7 +39,7 @@ public class OfferGetALLAndOneTest {
         try {
 
             // Create request
-            Content content = Request.Get("http://localhost:7070/offer/SSE")
+            Content content = Request.Get("http://localhost:7070/offer/SE")
                     // Fetch request and return content
                     .execute().returnContent();
 

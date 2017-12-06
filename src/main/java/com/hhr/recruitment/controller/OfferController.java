@@ -56,7 +56,7 @@ public class OfferController {
             Offer offer= offerService.findById(id);
            return new ResponseEntity(offer, HttpStatus.OK);
         }catch (Exception e){
-            log.error("" + e.getMessage());
+            log.error(e.getMessage());
             return new ResponseEntity(e.getCause().toString(),HttpStatus.NOT_FOUND);
         }
     }
