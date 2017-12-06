@@ -1,4 +1,4 @@
-package com.hhr.recruitment;
+package com.hhr.recruitment.mock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhr.recruitment.model.Offer;

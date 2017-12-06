@@ -25,7 +25,6 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.hhr.recruitment.controller"))
                 .paths(regex(".*"))
-               //.paths(regex("/application.*"))
                 .build().apiInfo(metaData());
     }
 

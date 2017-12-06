@@ -13,11 +13,7 @@ import java.util.List;
  * Created by sharaf on 12/4/17.
  */
 @Repository
-public interface ApplicationRepository extends JpaRepository<ApplicationEntity, ApplicationId>{
-//CrudRepository<ApplicationEntity,ApplicationId> {
+public interface ApplicationRepository extends CrudRepository<ApplicationEntity, ApplicationId>{
 
     List<ApplicationEntity> findByIdRelatedOffer(String relatedOffer);
-
-   // ApplicationEntity findByIdRelatedOfferAndIdEmail(ApplicationId applicationId);
-   //ApplicationEntity findByIdRelatedOfferAndIdEmail(String relatedOffer,String  email);
 }

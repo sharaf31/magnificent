@@ -4,6 +4,8 @@ import com.hhr.recruitment.model.Application;
 import com.hhr.recruitment.model.Offer;
 import com.hhr.recruitment.service.ApplicationService;
 import com.hhr.recruitment.service.OfferService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/application")
+@Api(value="HR Systems", description="Operations for Application")
 public class ApplicationController {
 
 
@@ -30,9 +33,7 @@ public class ApplicationController {
     private ApplicationService applicantService;
 
 
-    @Autowired
-    private OfferService offerService;
-
+    @ApiOperation(value = "Create new Application for an offer")
     @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> submitApplication(@RequestBody Application application) {
         log.info("PUT:/application/ is invoked");
@@ -50,6 +51,7 @@ public class ApplicationController {
 
 
 
+    @ApiOperation(value = "View a list of Applications for Offer", response = Iterable.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Application>> getOneApplication(@PathVariable final String id){
         log.info("GET:/application/{id} is invoked");
@@ -61,8 +63,9 @@ public class ApplicationController {
         }
     }
 
+    @ApiOperation(value = "Update the status for given application to offer", response = Iterable.class)
     @RequestMapping(value = "/{offerId}/{ApplicationId}", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Application>> updateApplicationStatus(@PathVariable final String offerId,@PathVariable final String ApplicationId,@RequestBody String nextStatus){
+    public ResponseEntity<Application> updateApplicationStatus(@PathVariable final String offerId,@PathVariable final String ApplicationId,@RequestBody String nextStatus){
         log.info("POST:/application/{offerId}/{ApplicationId} is invoked");
         try {
             return new ResponseEntity(applicantService.updateStatus(offerId,ApplicationId,nextStatus),HttpStatus.OK);
@@ -72,6 +75,7 @@ public class ApplicationController {
         }
     }
 
+    @ApiOperation(value = "View a list of Applications for all Offer", response = Iterable.class)
     @RequestMapping(method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Application>> getAllApplication() {
         log.info("GET:/application/ is invoked");

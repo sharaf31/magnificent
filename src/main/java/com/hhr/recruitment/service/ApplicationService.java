@@ -86,12 +86,14 @@ public class ApplicationService {
     }
 
 
-    public Application updateStatus(String offerId, String applicationId, String nextStatus) throws Exception {
-        if (offerId == null || offerId.equalsIgnoreCase("") || applicationId == null || applicationId.equalsIgnoreCase("") || nextStatus == null || nextStatus.equalsIgnoreCase(""))
+    public Application updateStatus(String offerId, String emailId, String nextStatus) throws Exception {
+        if (offerId == null || offerId.equalsIgnoreCase("") || emailId == null || emailId.equalsIgnoreCase("") || nextStatus == null || nextStatus.equalsIgnoreCase(""))
             throw new Exception("Offer Id & Application Id & next Status cannot be null");
         //String email, String relatedOffer
-        ApplicationId applicationEntityId = new ApplicationId(applicationId,offerId);
-        ApplicationEntity applicationEntity = applicationRepository.findOne(applicationEntityId);
+        ApplicationId applicationId = new ApplicationId();
+        applicationId.setEmail(emailId);
+        applicationId.setRelatedOffer(offerId);
+        ApplicationEntity applicationEntity = applicationRepository.findOne(applicationId);
         if (applicationEntity == null) {
             throw new Exception("Application does not exist for this offer");
         }
@@ -118,8 +120,6 @@ public class ApplicationService {
         application.setEmail(applicationEntity.getId().getEmail());
         return application;
     }
-
-
 
 
 }

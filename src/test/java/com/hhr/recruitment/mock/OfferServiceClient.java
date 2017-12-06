@@ -1,4 +1,4 @@
-package com.hhr.recruitment;
+package com.hhr.recruitment.mock;
 
 import com.hhr.recruitment.model.Offer;
 import org.springframework.boot.web.client.RestTemplateBuilder;

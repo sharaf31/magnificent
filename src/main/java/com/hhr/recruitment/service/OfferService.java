@@ -41,12 +41,18 @@ public class OfferService {
         for (OfferEntity entity :offerRepository.findAll()){
             offerList.add(modelMapper.map(entity, Offer.class));
         }
+        if(offerList.isEmpty()){
+            throw new Exception("No Offer Currently Exists");
+        }
         return  offerList;
     }
 
     public Offer findById(String id) throws Exception{
         OfferEntity offerEntity=offerRepository.findOne(id);
         Offer resultDto=modelMapper.map(offerEntity, Offer.class);
+        if (resultDto==null){
+            throw new Exception("Offer does not exist on this ID");
+        }
         return resultDto;
     }
 }

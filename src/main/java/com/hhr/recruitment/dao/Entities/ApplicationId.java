@@ -14,7 +14,6 @@ public class ApplicationId implements Serializable {
     @Column(name = "email")
     private String email;
 
-
     @Column(name = "related_offer")
     private String relatedOffer;
 
