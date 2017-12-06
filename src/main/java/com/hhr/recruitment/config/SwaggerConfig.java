@@ -24,7 +24,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.hhr.recruitment.controller"))
-                .paths(regex("/offer.*"))
+                .paths(regex(".*"))
                //.paths(regex("/application.*"))
                 .build().apiInfo(metaData());
     }
