@@ -16,4 +16,5 @@ import java.util.List;
 public interface ApplicationRepository extends CrudRepository<ApplicationEntity, ApplicationId>{
 
     List<ApplicationEntity> findByIdRelatedOffer(String relatedOffer);
+
 }

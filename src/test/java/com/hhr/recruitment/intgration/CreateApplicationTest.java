@@ -27,8 +27,8 @@ public class CreateApplicationTest
                     .addHeader("Content-Type", "application/json")
 
                     // Add body
-                    .bodyString("{\"email\": \"mostafa.moh@gmail.com\",\"resume\": \"sample 1\"," +
-                            "\"applicationStatus\": \"APPLIED\",\"relatedOffer\": \"SE\"}", ContentType.APPLICATION_JSON)
+                    .bodyString("{\"relatedOffer\": \"SE\",\"email\": \"" +
+                            "sharaf.navas@gmail.com\",\"resume\": \"sample 1\"}", ContentType.APPLICATION_JSON)
 
                     // Fetch request and return content
                     .execute().returnContent();

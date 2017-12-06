@@ -25,8 +25,7 @@ public class UpdateNextStatusTest
         try {
 
             // Create request
-            Content content = Request.Post("http://localhost:7070/application/SE/mostafa.moh@gmail.com")
-
+            Content content = Request.Post("http://localhost:7070/application/sharaf.navas@gmail.com/SE")
                     // Add headers
                     .addHeader("Content-Type", "application/json")
 

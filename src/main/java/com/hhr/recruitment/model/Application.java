@@ -13,7 +13,7 @@ public class Application {
     private String relatedOffer;
     private String email;
     private String resume;
-    private String applicationStatus;
+    private String status;
 
     public String getRelatedOffer() {
         return relatedOffer;
@@ -39,12 +39,12 @@ public class Application {
         this.resume = resume;
     }
 
-    public String getApplicationStatus() {
-        return applicationStatus;
+    public String getStatus () {
+        return status;
     }
 
-    public void setApplicationStatus(String applicationStatus) {
-        this.applicationStatus = applicationStatus;
+    public void setStatus ( String status ) {
+        this.status = status;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class Application {
                 "relatedOffer='" + relatedOffer + '\'' +
                 ", email='" + email + '\'' +
                 ", resume='" + resume + '\'' +
-                ", applicationStatus='" + applicationStatus + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

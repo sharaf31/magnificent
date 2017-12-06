@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.beans.PropertyEditorSupport;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,14 +37,13 @@ public class OfferController {
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<Offer> createOffer(@RequestBody Offer offer){
 
-        log.info("PUT:/offer/ is invoked");
        try {
            offer.setNoOfApplication(0);
            Offer offerResults=offerService.saveOrUpdate(offer);
            return new ResponseEntity(offerResults.toString(), HttpStatus.CREATED);
        }catch (Exception e){
            e.printStackTrace();
-           return new ResponseEntity(e.getCause(),HttpStatus.BAD_REQUEST);}
+           return new ResponseEntity(e.getCause().toString(),HttpStatus.BAD_REQUEST);}
 
     }
 
@@ -49,13 +51,13 @@ public class OfferController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<Offer> getOneOffer(@PathVariable final String id){
-        log.info("GET:/offer/{id} is invoked");
+
         try {
             Offer offer= offerService.findById(id);
            return new ResponseEntity(offer, HttpStatus.OK);
         }catch (Exception e){
-            e.printStackTrace();
-            return new ResponseEntity(e.getCause(),HttpStatus.NOT_FOUND);
+            log.error("" + e.getMessage());
+            return new ResponseEntity(e.getCause().toString(),HttpStatus.NOT_FOUND);
         }
     }
 
@@ -63,16 +65,25 @@ public class OfferController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<Offer>> getAllOffer(){
-        log.info("GET:/offer/ is invoked");
+
         try {
             List<Offer> offerResults=offerService.getAll();
             return new ResponseEntity(offerResults, HttpStatus.OK);
         }catch (Exception e){
-            e.printStackTrace();
-            return new ResponseEntity(e.getCause(),HttpStatus.NOT_FOUND);
+            log.error("" + e.getMessage());
+            return new ResponseEntity(e.getCause().toString(),HttpStatus.NOT_FOUND);
         }
 
     }
 
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+            public void setAsText(String value) {
+                setValue(new Date(Long.valueOf(value)));
+            }
+
+        });
+    }
 
 }

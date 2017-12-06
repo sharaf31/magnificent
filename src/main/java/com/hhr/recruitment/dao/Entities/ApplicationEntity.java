@@ -65,4 +65,13 @@ public class ApplicationEntity {
         result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ApplicationEntity{" +
+                "id=" + id +
+                ", resume='" + resume + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

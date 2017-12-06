@@ -41,9 +41,6 @@ public class OfferService {
         for (OfferEntity entity :offerRepository.findAll()){
             offerList.add(modelMapper.map(entity, Offer.class));
         }
-        if(offerList.isEmpty()){
-            throw new Exception("No Offer Currently Exists");
-        }
         return  offerList;
     }
 

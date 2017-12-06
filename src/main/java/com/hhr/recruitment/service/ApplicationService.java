@@ -5,6 +5,7 @@ import com.hhr.recruitment.dao.Entities.ApplicationEntity;
 import com.hhr.recruitment.dao.Entities.ApplicationId;
 import com.hhr.recruitment.model.Application;
 import com.hhr.recruitment.model.Offer;
+import com.hhr.recruitment.model.enums.ApplicationStatus;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,7 +28,7 @@ import java.util.List;
 public class ApplicationService {
 
 
-    private Logger log = LoggerFactory.getLogger(ApplicationService.class);
+    private Logger log = LoggerFactory.getLogger( ApplicationService.class );
 
     @Autowired
     private ApplicationRepository applicationRepository;
@@ -40,87 +43,100 @@ public class ApplicationService {
     @Autowired
     private NotificationService notificationService;
 
-    public Application save(Application application) throws Exception {
+    public Application save ( Application application ) throws Exception {
 
-        if (application.getRelatedOffer() == null || application.getRelatedOffer().equalsIgnoreCase("")) {
-            log.error("Offer dont exist");
-            throw new Exception("Offer cannot be null");
+        if (application.getRelatedOffer() == null || application.getRelatedOffer().equalsIgnoreCase( "" )) {
+            log.error( "Offer dont exist" );
+            throw new Exception( "Offer cannot be null" );
         }
 
-        if (offerService.findById(application.getRelatedOffer()) == null) {
-            log.error("Offer dont exist");
-            throw new Exception("Offer don't exist");
+        if (offerService.findById( application.getRelatedOffer() ) == null) {
+            log.error( "Offer dont exist" );
+            throw new Exception( "Offer don't exist" );
         }
 
-        ApplicationId applicationId = new ApplicationId(application.getEmail(), application.getRelatedOffer());
+        ApplicationId applicationId = new ApplicationId( application.getEmail(), application.getRelatedOffer() );
 
-        if (applicationRepository.findOne(applicationId) != null) {
-            throw new Exception("Already you have applied");
+        if (applicationRepository.findOne( applicationId ) != null) {
+            throw new Exception( "Already you have applied" );
         }
 
 
-        ApplicationEntity applicationEntity = modelMapper.map(application, ApplicationEntity.class);
-        applicationEntity.setId(applicationId);
-        applicationEntity = applicationRepository.save(applicationEntity);
+        ApplicationEntity applicationEntity = modelMapper.map( application, ApplicationEntity.class );
+        applicationEntity.setId( applicationId );
+        applicationEntity.setStatus( ApplicationStatus.APPLIED.toString());
+        applicationEntity = applicationRepository.save( applicationEntity );
 
         // Notification for initial status
-        notificationService.sendNotification(applicationEntity.getId().getEmail(),applicationEntity.getStatus());
+        notificationService.sendNotification( applicationEntity.getId().getEmail(), applicationEntity.getStatus() );
 
-        Offer offer = offerService.findById(application.getRelatedOffer());
+        Offer offer = offerService.findById( application.getRelatedOffer() );
         Integer count = offer.getNoOfApplication();
         count++;
-        offer.setNoOfApplication(count);
-        offerService.saveOrUpdate(offer);
-        application = modelMapper.map(applicationEntity, Application.class);
+        offer.setNoOfApplication( count );
+        offerService.saveOrUpdate( offer );
+        application = entityToDto( applicationEntity );
         return application;
     }
 
 
-    public List<Application> findApplicationOffers(String offerId) throws Exception {
+    public List<Application> findApplicationOffers ( String offerId ) throws Exception {
         List<Application> applicationList = new ArrayList<Application>();
-        for (ApplicationEntity applicationEntity : applicationRepository.findByIdRelatedOffer(offerId)) {
-            Application application = entityToDto(applicationEntity);
-            applicationList.add(application);
+        for (ApplicationEntity applicationEntity : applicationRepository.findByIdRelatedOffer( offerId )) {
+            Application application = entityToDto( applicationEntity );
+            applicationList.add( application );
         }
         return applicationList;
     }
 
 
-    public Application updateStatus(String offerId, String emailId, String nextStatus) throws Exception {
-        if (offerId == null || offerId.equalsIgnoreCase("") || emailId == null || emailId.equalsIgnoreCase("") || nextStatus == null || nextStatus.equalsIgnoreCase(""))
-            throw new Exception("Offer Id & Application Id & next Status cannot be null");
-        //String email, String relatedOffer
-        ApplicationId applicationId = new ApplicationId();
-        applicationId.setEmail(emailId);
-        applicationId.setRelatedOffer(offerId);
-        ApplicationEntity applicationEntity = applicationRepository.findOne(applicationId);
+    public Application updateStatus ( String offerId, String emailId, String nextStatus ) throws Exception {
+        if (offerId == null || offerId.equalsIgnoreCase( "" ) || emailId == null || emailId.equalsIgnoreCase( "" ) || nextStatus == null || nextStatus.equalsIgnoreCase( "" ))
+            throw new Exception( "Offer Id & Application Id & next Status cannot be null" );
+
+        statusCheck(nextStatus);
+        ApplicationId applicationId = new ApplicationId( emailId, offerId );
+        ApplicationEntity applicationEntity = applicationRepository.findOne( applicationId );
+
         if (applicationEntity == null) {
-            throw new Exception("Application does not exist for this offer");
+            throw new Exception( "Application does not exist for this offer" );
         }
-        applicationEntity.setStatus(nextStatus);
-        applicationEntity = applicationRepository.save(applicationEntity);
+        applicationEntity.setStatus( nextStatus );
+        applicationEntity = applicationRepository.save( applicationEntity );
+
         // Notification for initial status
-        notificationService.sendNotification(applicationEntity.getId().getEmail(),applicationEntity.getStatus());
-        return entityToDto(applicationEntity);
+        notificationService.sendNotification( applicationEntity.getId().getEmail(), applicationEntity.getStatus() );
+        return entityToDto( applicationEntity );
     }
 
 
-    public List<Application> getAll(){
+    public List<Application> getAll () {
         List<Application> applicationList = new ArrayList<Application>();
         for (ApplicationEntity applicationEntity : applicationRepository.findAll()) {
-            Application application = entityToDto(applicationEntity);
-            applicationList.add(application);
+            Application application = entityToDto( applicationEntity );
+            applicationList.add( application );
         }
         return applicationList;
     }
 
-    private Application entityToDto(ApplicationEntity applicationEntity) {
-        Application application = modelMapper.map(applicationEntity, Application.class);
-        application.setRelatedOffer(applicationEntity.getId().getRelatedOffer());
-        application.setEmail(applicationEntity.getId().getEmail());
+    private Application entityToDto ( ApplicationEntity applicationEntity ) {
+        Application application = modelMapper.map( applicationEntity, Application.class );
+        application.setRelatedOffer( applicationEntity.getId().getRelatedOffer() );
+        application.setEmail( applicationEntity.getId().getEmail() );
         return application;
     }
 
+
+    private void statusCheck(String nextStatus)throws Exception{
+        Boolean check=false;
+        for(ApplicationStatus applicationStatus:ApplicationStatus.values()) {
+            if(applicationStatus.toString().equalsIgnoreCase( nextStatus )){
+                check=true;
+            }
+
+        }
+        if(!check) throw new Exception("Invalid Next Status");
+    }
 
 }
 

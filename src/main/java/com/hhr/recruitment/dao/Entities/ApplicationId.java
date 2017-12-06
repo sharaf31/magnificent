@@ -59,4 +59,12 @@ public class ApplicationId implements Serializable {
         result = 31 * result + (getRelatedOffer() != null ? getRelatedOffer().hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ApplicationId{" +
+                "email='" + email + '\'' +
+                ", relatedOffer='" + relatedOffer + '\'' +
+                '}';
+    }
 }
