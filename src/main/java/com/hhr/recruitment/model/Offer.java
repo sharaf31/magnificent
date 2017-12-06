@@ -51,4 +51,12 @@ public class Offer {
                 ", noOfApplication=" + noOfApplication +
                 '}';
     }
+
+    public Offer(String jobTitle, Date startDate) {
+        this.jobTitle = jobTitle;
+        this.startDate = startDate;
+    }
+
+    public Offer() {
+    }
 }

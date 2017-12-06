@@ -2,7 +2,6 @@ package com.hhr.recruitment.dao.Entities;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import java.io.Serializable;
 
 /**
@@ -11,8 +10,10 @@ import java.io.Serializable;
 @Embeddable
 public class ApplicationId implements Serializable {
 
+
     @Column(name = "email")
     private String email;
+
 
     @Column(name = "related_offer")
     private String relatedOffer;
@@ -39,5 +40,24 @@ public class ApplicationId implements Serializable {
     public ApplicationId(String email, String relatedOffer) {
         this.email = email;
         this.relatedOffer = relatedOffer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ApplicationId)) return false;
+
+        ApplicationId that = (ApplicationId) o;
+
+        if (getEmail() != null ? !getEmail().equals(that.getEmail()) : that.getEmail() != null) return false;
+        return getRelatedOffer() != null ? getRelatedOffer().equals(that.getRelatedOffer()) : that.getRelatedOffer() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getEmail() != null ? getEmail().hashCode() : 0;
+        result = 31 * result + (getRelatedOffer() != null ? getRelatedOffer().hashCode() : 0);
+        return result;
     }
 }

@@ -1,9 +1,6 @@
 package com.hhr.recruitment.dao.Entities;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * JPA objects for Application
@@ -11,7 +8,7 @@ import javax.persistence.Table;
  * Created by sharaf on 12/4/17.
  */
 @Entity
-@Table(name = "JOB_APPLICANT")
+@Table(name = "JOB_APPLICANT" )
 public class ApplicationEntity {
 
 
@@ -46,5 +43,26 @@ public class ApplicationEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ApplicationEntity)) return false;
+
+        ApplicationEntity that = (ApplicationEntity) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getResume() != null ? !getResume().equals(that.getResume()) : that.getResume() != null) return false;
+        return getStatus() != null ? getStatus().equals(that.getStatus()) : that.getStatus() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getResume() != null ? getResume().hashCode() : 0);
+        result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
+        return result;
     }
 }

@@ -19,8 +19,6 @@ import java.util.List;
 @RequestMapping(value = "/offer",produces = MediaType.APPLICATION_JSON_VALUE)
 public class OfferController {
 
-
-
     @Autowired
     private OfferService offerService;
 
@@ -28,7 +26,6 @@ public class OfferController {
     private Logger log= LoggerFactory.getLogger(OfferController.class);
 
     @RequestMapping(method = RequestMethod.PUT)
-    @ResponseBody
     public String createOffer(@RequestBody Offer offer){
 
         log.info("PUT:/offer/ is invoked");
@@ -55,7 +52,6 @@ public class OfferController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
     public List<Offer> getAllOffer(){
         log.info("GET:/offer/ is invoked");
         try {
