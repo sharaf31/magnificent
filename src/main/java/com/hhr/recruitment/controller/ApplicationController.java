@@ -43,7 +43,7 @@ public class ApplicationController {
     @RequestMapping(method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> submitApplication(@RequestBody Application application) {
         try {
-            applicantService.save(application);
+            application=applicantService.save(application);
 
         } catch (Exception e) {
             log.error("" + e.getMessage());

@@ -18,6 +18,7 @@ public class OfferEntity {
     private String jobTitle;
 
     @Column(name = "start_date")
+    @Temporal(TemporalType.DATE)
     private Date startDate;
 
     @Column(name = "no_of_applications")
